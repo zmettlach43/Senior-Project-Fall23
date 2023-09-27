@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">  
+        <title>Reset Coffee Shop</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+
+        {% block head %}
+        {% endblock %}
+
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg" style="background-color: rgb(45, 41, 41);">
+            <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'menu' %}">Menu</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'aboutus' %}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'checkout' %}">Checkout</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        
+        {% block content %} 
+        {% endblock %}
+        
+        <footer>
+            <h3>Contact Us</h3>
+            <address>
+                <ul>
+                    <li>Phone:<a href="tel:(956) 270-3945">(956) 270-3945</a></li>
+                    <li>Email:<a href="mailto:sam207139@gmail.com"> sam207139@gmail.com</a></li>
+                    <li>Address:<a href="https://www.google.com/maps?q=4200+Tres+Lagos+Blvd,+McAllen,+TX+78504" target="_blank"> 4200 Tres Lagos Blvd, McAllen, TX 78504</a></li> 
+                </ul>
+            </address>
+            
+        </footer>
+    </body>
+</html>

@@ -8,17 +8,12 @@
 
 {% block content %}
 
-<div class="logo">
-  <h1>Reset Coffee Shop</h1>
-</div>
-
 <div class="container">
-  <h2>Welcome to Reset Coffee Shop</h2>
-  <p>We are a small coffee shop that specializes in artisanal coffee blends and fresh baked goods. Our coffee beans are carefully selected from the best coffee farms in the world and our baked goods are made with the finest ingredients.</p>
-
-  <h3>Our Menu</h3>
-  <p>Check out our menu of delicious coffee drinks and baked goods:</p>
+  <h3 style="color: white;">Our Menu</h3>
+  <p style="color: white;">Check out our <a href="{% url 'menu' %}">menu</a> of delicious coffee drinks and baked goods:</p>
  
 </div>
-
+<div>
+  <p style="text-align: center;"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2492.092528142061!2d-98.24833331035633!3d26.339000027241507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8665a513a29b29fd%3A0x10fb5254376076eb!2sReset%20Specialty%20Coffee!5e0!3m2!1sen!2sus!4v1696026629466!5m2!1sen!2sus" width="700" height="550" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+</div>
 {% endblock %}

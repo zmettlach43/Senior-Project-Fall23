@@ -8,5 +8,9 @@
 {% endblock %}
 
 {% block content %}
-
+<ul class="list-unstyled">
+  {% for menuitem in menuitems %}
+  <li style="color: white">{{ menuitem.name }} ${{ menuitem.price }} {{ menuitem.addin }}</li><button type="button" class="btn btn-outline-secondary">Add To Cart</button>
+  {% endfor %}
+</ul>
 {% endblock %}

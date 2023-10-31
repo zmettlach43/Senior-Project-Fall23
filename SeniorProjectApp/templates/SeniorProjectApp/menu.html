@@ -20,15 +20,13 @@
           <div class="card-body">
             <ul>
               {% for item in category.menu_items.all %}
-              <div class="card">
-                <div class="card-header">
-                  <strong>{{ item.name }}</strong>
-                </div>
-                <div class="card-body">
-                  <p class="card-text">Price: ${{ item.price }}</p>
-                  <p class="card-text"><button type="button" class="btn btn-dark">Add To Cart</button></p>
-                </div>
-              </div>
+                <a href="{% url 'item_detail' item.id %}">
+                  {% if item.image %}
+                    <img src="{{ item.image.url }}" width="45">
+                  {% else %}
+                    <img src="{% static 'default_image.png' %}" width="45">
+                  {% endif %}
+                </a>
               {% endfor %}
             </ul>
           </div>

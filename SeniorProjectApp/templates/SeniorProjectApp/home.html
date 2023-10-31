@@ -7,11 +7,33 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="container">
-
-</div>
-<div>
-  <p style="text-align: center;"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2492.092528142061!2d-98.24833331035633!3d26.339000027241507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8665a513a29b29fd%3A0x10fb5254376076eb!2sReset%20Specialty%20Coffee!5e0!3m2!1sen!2sus!4v1696026629466!5m2!1sen!2sus" width="700" height="550" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
-</div>
+ <!-- slider section -->
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      {% for object in obj %}
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+      {% endfor %}
+    </div>
+    <div class="carousel-inner">
+      {% for object in obj %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="{% static object.image.url %}" style="height: 650px; margin: 0 auto;" class="testi-overly d-block mx-auto" alt="sliderImg">
+        <div class="carousel-caption d-none d-md-block text-center">
+          <h1 class="animate__animated
+            {% if forloop.first %}
+            animate__fadeInDown
+            {% endif %}
+            {% if forloop.index0 == 1 %}
+            animate__bounce
+            {% endif %}
+            {% if forloop.index0 == 2 %}
+            animate__fadeInRight
+            {% endif %}">{{ object.title }}</h1>
+          <h3 class="animate__animated animate__zoomIn">{{ object.sub_title }}</h3>
+          <a href="{{ object.link }}" class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">{{ object.action_name }}</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}

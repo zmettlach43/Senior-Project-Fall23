@@ -11,29 +11,35 @@
 <div class="container align-items-center justify-content-center">
   <ul class="list-unstyled">
     {% for category in categories %}
-    <li>
-      <div class="card custom-bg-color w-50 mb-4">
-        <div class="card-header text-center">
-         <h2 style="color: white;">{{ category.name }}</h2>
-        </div>
-        <div class="card-body">
-          <ul>
-            {% for item in category.menu_items.all %}
-            <div class="card">
-              <div class="card-header">
-                <strong>{{ item.name }}</strong>
+    <div class="row">
+      <li>
+        <div class="card custom-bg-color">
+          <div class="card-header text-center">
+            <h2 style="color: white;">{{ category.name }}</h2>
+          </div>
+          <div class="card-body">
+            <ul>
+              {% for item in category.menu_items.all %}
+              <div class="card">
+                <div class="card-header">
+                  <strong>{{ item.name }}</strong>
+                </div>
+                <div class="card-body">
+                  <p class="card-text">Price: ${{ item.price }}</p>
+                  <p class="card-text"><button type="button" class="btn btn-dark">Add To Cart</button></p>
+                </div>
               </div>
-              <div class="card-body">
-                <p class="card-text">Price: ${{ item.price }}</p>
-                <p class="card-text"><button type="button" class="btn btn-dark">Add To Cart</button></p>
-              </div>
-            </div>
-            {% endfor %}
-          </ul>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
+    </div>
+    {% if forloop.counter == 1 %}
+      <div class="clearfix"></div>
+    {% endif %}
     {% endfor %}
   </ul>
 </div>
 {% endblock %}
+

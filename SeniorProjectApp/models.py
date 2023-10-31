@@ -31,5 +31,10 @@ class Cart(models.Model):
     products = models.ManyToManyField(MenuItem, blank=True)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
 
+class Carausel(models.Model):
+    image = models.ImageField(upload_to= '')
+    title = models.CharField(max_length=150)
+    sub_title = models.CharField(max_length=100)
+
     def __str__(self):
         return str(self.id)

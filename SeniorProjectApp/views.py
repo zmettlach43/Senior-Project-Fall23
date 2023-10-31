@@ -1,10 +1,15 @@
 from django.shortcuts import render
-from .models import MenuItemCategory, MenuItem, Menu, Cart
+from .models import MenuItemCategory, MenuItem, Menu, Cart, Carausel
 
 # Create your views here.
 
 def home(request):
-    return render(request, "SeniorProjectApp/home.html")
+    obj = Carausel.objects.all()
+    context = {
+        'obj':obj
+    }
+
+    return render(request, "SeniorProjectApp/home.html", context)
 
 def menu(request):
     categories = MenuItemCategory.objects.all()

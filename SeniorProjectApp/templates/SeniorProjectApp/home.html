@@ -17,7 +17,7 @@
     <div class="carousel-inner">
       {% for object in obj %}
       <div class="carousel-item {% if forloop.first %}active{% endif %}">
-        <img src="{% static object.image.url %}" style="height: 650px; margin: 0 auto;" class="testi-overly d-block mx-auto" alt="sliderImg">
+        <img src="{{ object.image.url }}" style="height: 650px; margin: 0 auto;" class="testi-overly d-block mx-auto" alt="sliderImg">
         <div class="carousel-caption d-none d-md-block text-center">
           <h1 class="animate__animated
             {% if forloop.first %}

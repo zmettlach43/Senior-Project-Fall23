@@ -30,7 +30,7 @@ class Menu(models.Model):
         return self.name
 
 class Carausel(models.Model):
-    image = models.ImageField(upload_to= '')
+    image = models.ImageField(upload_to= 'uploads/carausel/')
     title = models.CharField(max_length=150)
     sub_title = models.CharField(max_length=100)
 

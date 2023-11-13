@@ -10,6 +10,9 @@ from django import forms
 
 # Create your views here.
 
+def index(request):
+    return render(request, 'SeniorProjectApp/index.html', {'user': request.user})
+
 def home(request):
     obj = Carausel.objects.all()
     context = {
@@ -68,3 +71,4 @@ def register_user(request):
             return redirect('register')
     else: 
         return render(request, "SeniorProjectApp/register.html", {'form': form})
+

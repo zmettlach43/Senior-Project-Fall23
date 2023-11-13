@@ -7,5 +7,3 @@ class Cart():
             cart = self.session['sesion_key'] = {}
         
         self.cart = cart
-
-        

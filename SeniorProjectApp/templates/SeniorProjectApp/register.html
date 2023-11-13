@@ -15,11 +15,11 @@
                 <form method="POST" action="{% url 'register' %}">
                     {% csrf_token %}
                     
-                    {{ form.as_p}}
+                    {{ form.as_p }}
                     <br/><br/>
-                    <buttom type="submit" class="btn btn-secondary">
+                    <button type="submit" class="btn btn-secondary">
                         Sign Up
-                    </buttom>
+                    </button>
 
                 </form>
             </div>

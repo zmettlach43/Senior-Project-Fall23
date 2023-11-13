@@ -9,8 +9,12 @@
         {% bootstrap_javascript %}
 
         {% block head %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         {% endblock %}
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <title>Reset Specialty Coffee</title>
+        <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+
     </head>
     
     <body style="background-color: rgb(48, 47, 47)">
@@ -50,8 +54,14 @@
                 </li>
                 <li>
                   <a class="nav-link" href="{% url 'register' %}" style="color: white;">Register</a>
-              </li>
+                </li>
               {% endif %}
+
+              {% if user.is_authenticated and user.is_staff %}
+                <li>
+                  <a class="nav-link" href="{% url 'admin:index' %}" style="color: white;">Admin Page</a>
+                </li>
+              {% endif  %}
     
                 <form class="d-flex">
                   <a href="{% url 'cart' %}" class="btn btn-outline-light">

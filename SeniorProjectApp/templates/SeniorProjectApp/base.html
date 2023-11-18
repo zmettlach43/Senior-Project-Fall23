@@ -14,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         <title>Reset Specialty Coffee</title>
         <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     </head>
     
@@ -70,7 +71,10 @@
                     </svg> 
                     <i class="bi-cart-fill me-1"></i>
                     Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity">
+                      {{ cart|length }}
+                  </span>
+                  </a>
                   </a>
                 </form>
 

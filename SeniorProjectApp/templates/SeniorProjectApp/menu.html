@@ -4,33 +4,74 @@
 
 {% block head %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <style>
+    .sidebar {
+    width: 250px;
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 110px;
+    z-index: 1000;
+    background-color: #f8f9fa0e; /* Adjust the color as needed */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    padding-top: 20px;
+  }
+
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    
+    padding: 8px;
+    text-align: left;
+  }
+
+  .sidebar ul li a {
+    text-decoration: none;
+    color: white; /* Adjust the color as needed */
+    display: block;
+  }
+
+  .sidebar ul li a:hover {
+    background-color: #110101; /* Adjust the color for hover effect */
+  }
+  .containerrow {
+  scroll-margin-top: 120px;
+}
+  </style>
 {% endblock %}
 
+
 {% block content %}
+<nav class="sidebar">
+  <ul>
+    {% for category in categories %}
+    <li>
+      <a href="#{{ category.name }}">{{ category.name }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</nav>
 <div class="container align-items-center justify-content-center">
   <ul class="list-unstyled">
     {% for category in categories %}
-    <div class="row">
-      <li>
-        <div class="card custom-bg-color">
+    <div class="row containerrow" id="{{category.name}}" style = "display: flex;" > 
+      <h2 style="color: white;">{{ category.name }}</h2>
+      {% for item in category.menu_items.all %}
+      <a href="{% url 'item_detail' item.id %}" style = " width: 20% ; float: left; margin: 2em; text-decoration: none;">
+        <div class="card " style = " box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px; border-radius: 10px; height: 250px; background-size: cover; aspect-ratio: 1/1; background-color: #f8f9fa0e; color: white; background-image: url('{{item.image.url}}');"> 
           <div class="card-header text-center">
-            <h2 style="color: black;">{{ category.name }}</h2>
+            <h3>
+              {{ item.name }}
+            </h3>
           </div>
-          <div class="card-body">
-            <ul>
-              {% for item in category.menu_items.all %}
-                <a href="{% url 'item_detail' item.id %}">
-                  {% if item.image %}
-                    <img src="{{ item.image.url }}" width="45">
-                  {% else %}
-                    <img src="{% static 'static/default_image.png' %}" width="45">
-                  {% endif %}
-                </a>
-              {% endfor %}
-            </ul>
+          <div class="card-body" style="display: flex; justify-content: center; align-items: center;">
           </div>
         </div>
-      </li>
+      </a>
+      {% endfor %}
     </div>
     {% if forloop.counter == 1 %}
       <div class="clearfix"></div>

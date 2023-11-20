@@ -1,0 +1,32 @@
+  /* Sidebar styling */
+  .sidebar {
+    width: 250px;
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    background-color: #f8f9fa; /* Adjust the color as needed */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    padding-top: 20px;
+  }
+
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    padding: 8px;
+    text-align: left;
+  }
+
+  .sidebar ul li a {
+    text-decoration: none;
+    color: black; /* Adjust the color as needed */
+    display: block;
+  }
+
+  .sidebar ul li a:hover {
+    background-color: #ddd; /* Adjust the color for hover effect */
+  }

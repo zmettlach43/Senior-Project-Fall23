@@ -4,53 +4,7 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-<style>
-  .flex-container {
-  display: flex;
-}
 
-.sidebar {
-  width: 2500px;
-  height: 110vh; /* This will make the sidebar take the full height of the viewport */
-  background-color: #f8f9fa0e; /* Adjust the color as needed */
-  overflow-x: hidden; /* Hide horizontal scrollbar */
-  padding-top: 30px;
-  position: fixed; /* Add this to make the sidebar stay in place when you scroll */
-}
-
-.sidebar ul {
-  list-style-type: none;
-  padding: 0;
-  padding-top: 50px; /* Decrease this value to move the content up */
-  margin: 0;
-}
-
-.sidebar ul li {
-  padding: 8px;
-  text-align: left;
-}
-
-.sidebar ul li a {
-  text-decoration: none;
-  color: white; /* Adjust the color as needed */
-  display: block;
-}
-
-.sidebar ul li a:hover {
-  background-color: #110101; /* Adjust the color for hover effect */
-}
-
-.content {
-  flex-grow: 1;
-  padding: 20px;
-  margin-left: 250px; /* Add margin to prevent content from being hidden by the sidebar */
-}
-
-.containerrow {
-  scroll-margin-top: 120px;
-}
-
-</style>
 {% endblock %}
 
 {% block content %}

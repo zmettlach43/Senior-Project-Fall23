@@ -42,7 +42,7 @@
                 action: 'post'
             },
             success: function(json){
-                document.getElementById("cart_quantity").textContent = json.qty
+                $('.cart-quantity').text(json.qty);
             },
             error: function(xhr, errmsg, err){
             } 

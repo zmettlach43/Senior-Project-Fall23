@@ -18,7 +18,7 @@
                 <div class="fs-5 mb-5">
                     <span style="color: white;">${{ item.price }}</span>
                 </div>
-                <p class="lead" style="color: white;">{{ item.description }}</p>
+                <p class="lead">{{ item.description }}</p>
                 <div class="d-flex">
                     <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" />
                     <button class="btn btn-outline-dark flex-shrink-0" type="button" style="color: white;" value="{{ item.id }}" id="add-cart">
@@ -35,14 +35,14 @@
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url: "{% url 'cart_add' %}",
+            url: '{% url 'cart_add' %}',
             data: {
                 product_id: $(this).val(),
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
             },
             success: function(json){
-                $('.cart-quantity').text(json.qty);
+                document.getElementById("cart_quantity").textContent = json.qty
             },
             error: function(xhr, errmsg, err){
             } 

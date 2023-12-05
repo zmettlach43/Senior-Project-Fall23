@@ -26,4 +26,28 @@
     </table>
     <p style="color:white">Total Price: ${{ total_price }}</p>
 </div>
+<script>
+    function removeFromCart(itemId) {
+        $.ajax({
+            url: "{% url 'cart_delete' %}",
+            type: 'POST',
+            data: {
+                'action': 'post',
+                'product_id': itemId,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+
+            dataType: 'json',
+            success: function (data) {
+                $('#cart-quantity').text(data.qty);
+
+                location.reload();
+            },
+
+            error: function(error) {
+                console.log('Error', error);
+            }
+        });
+    }
+</script>
 {% endblock %}

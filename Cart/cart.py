@@ -1,10 +1,14 @@
+from django.contrib.auth.models import User
+
 class Cart():
     def __init__(self, request):
-        self.session = request.session
+        self.request = request 
 
-        cart = self.session.get('session_key')
-        if 'session_key' not in request.session:
-            cart = self.session['session_key'] = {}
+        if request.user.is_authenticated:
+            user_id = str(request.user.id)
+            cart = self.request.session.get(user_id, {})
+        else:
+            cart = self.request.session.get('guest_cart', {})
         
         self.cart = cart
 
@@ -21,14 +25,27 @@ class Cart():
                 'id': item.id
             }
 
-        self.session.modified = True
+        if self.request.user.is_authenticated:
+            user_id = str(self.request.user.id)
+            self.request.session[user_id] = self.cart
+        else:
+            self.request.session['guest_cart'] = self.cart
 
+        self.request.session.modified = True
+ 
     def remove(self, item):
         item_id = str(item.id)
 
         if item_id in self.cart:
             del self.cart[item_id]
-            self.session.modified = True
+            
+            if self.request.user.is_authenticated:
+                user_id = str(self.request.user.id)
+                self.request.session[user_id] = self.cart
+            else:
+                self.request.session['guest_cart'] = self.cart
+
+            self.request.session.modified = True
 
     def __len__(self):
         return len(self.cart)

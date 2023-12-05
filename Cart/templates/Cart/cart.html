@@ -25,6 +25,13 @@
         </tbody>
     </table>
     <p style="color:white">Total Price: ${{ total_price }}</p>
+
+       <!-- Add a "Checkout" button that links to the checkout page and push it to the right -->
+       <div class="row">
+        <div class="col-md-8 offset-md-9"> <!-- Adjust the column width and offset as needed -->
+            <a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
+        </div>
+    </div>
 </div>
 <script>
     function removeFromCart(itemId) {

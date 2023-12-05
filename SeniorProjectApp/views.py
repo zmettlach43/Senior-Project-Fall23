@@ -10,8 +10,6 @@ from django import forms
 import stripe
 
 
-# Create your views here.
-
 def index(request):
     return render(request, 'SeniorProjectApp/index.html', {'user': request.user})
 
@@ -84,20 +82,16 @@ def checkout(request):
         try:
             # Charge the customer using the token and the amount to charge (in cents)
             charge = stripe.Charge.create(
-                amount=1000,  # $10 in cents
+                amount=1000,  
                 currency='usd',
                 source=token,
                 description='Payment for your order'
             )
 
-            # Payment successful, you can handle success actions here
-            # For example, update the order status in your database, send email confirmation, etc.
-
-            # Redirect to a success page
             return redirect('payment_success')
 
         except stripe.error.StripeError as e:
-            # Handle payment error
+        
             error_message = str(e)
             return render(request, 'checkout.html', {'error_message': error_message})
 

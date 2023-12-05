@@ -3,6 +3,9 @@ from .cart import Cart
 from SeniorProjectApp.models import MenuItem
 from django.http import JsonResponse
 
+import stripe
+
+stripe 
 def cart(request):
     cart = Cart(request)
     cart_items = cart.cart.values()
@@ -27,7 +30,17 @@ def cart_add(request):
 
 
 def cart_delete(request):
-    pass
+    cart = Cart(request)
+
+    if request.POST.get('action') == 'post':
+        item_id = int(request.POST.get('product_id'))
+        item = get_object_or_404(MenuItem, id=item_id)
+
+        cart.remove(item)
+        cart_quantity = len(cart)
+
+        response_data = {'qty': cart_quantity}
+        return JsonResponse(response_data)
 
 def cart_update(request):
     pass

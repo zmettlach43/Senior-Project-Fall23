@@ -17,10 +17,18 @@ class Cart():
             self.cart[item_id] = {
                 'name': item.name,
                 'price': str(item.price),
-                'quantity': 1
+                'quantity': 1,
+                'id': item.id,
             }
 
         self.session.modified = True
+
+    def remove(self, item):
+        item_id = str(item.id)
+
+        if item_id in self.cart:
+            del self.cart[item_id]
+            self.session.modified = True
 
     def __len__(self):
         return len(self.cart)

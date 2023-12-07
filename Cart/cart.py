@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from SeniorProjectApp.models import UserCart, CartItem
 
 class Cart():
     def __init__(self, request):
@@ -37,15 +38,32 @@ class Cart():
         item_id = str(item.id)
 
         if item_id in self.cart:
-            del self.cart[item_id]
-            
+            self.cart[item_id]['quantity'] -= 1
+            if self.cart[item_id]['quantity'] == 0:
+                del self.cart[item_id]
+
             if self.request.user.is_authenticated:
                 user_id = str(self.request.user.id)
                 self.request.session[user_id] = self.cart
+
+                user_cart, _ = UserCart.objects.get_or_create(user=self.request.user)
+                cart_item = CartItem.objects.get(product=item, cart=user_cart)
+
+                # Check if the quantity is greater than 1, then decrement the quantity
+                if cart_item.quantity > 1:
+                    cart_item.quantity -= 1
+                    cart_item.save()
+                else:
+                    # If the quantity is 1, remove the entire CartItem
+                    cart_item.delete()
+
+                # Remove the cart item from the UserCart
+                user_cart.products.remove(item)
             else:
                 self.request.session['guest_cart'] = self.cart
 
             self.request.session.modified = True
+
 
     def __len__(self):
         return len(self.cart)

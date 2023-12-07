@@ -8,25 +8,27 @@
             <tr>
                 <th scope="col" style="color:white">Item</th>
                 <th scope="col" style="color:white">Price</th>
+                <th scope="col" style="color:white">Quantity</th>
             </tr>
         </thead>
         <tbody>
           {% for item in cart_items %}
           <tr style="color: white">
-              <td>{{ item.name }}</td>
-              <td>${{ item.price }}</td>
-              <td>Quantity: {{ item.quantity }}</td>
-              <td>
-                <button class="btn btn-danger" onclick="removeFromCart({{ item.id }})">Remove</button></td>
-            
+            <td>{{ item.product.name }}</td>
+            <td>${{ item.product.price }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>
+                <button class="btn btn-danger" onclick="removeFromCart({{ item.id }})">Remove</button>
+            </td>            
           </tr>
           {% endfor %}
-          
         </tbody>
     </table>
     
     <p style="color:white">Subtotal: ${{ total_price|floatformat:2 }}</p>
 </div>
+
+</br></br></br></br></br></br></br></br></br></br></br>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8">
@@ -34,9 +36,6 @@
         </div>
     </div>
 </div>
-
-
-
 <script>
     function removeFromCart(itemId) {
         $.ajax({
@@ -47,18 +46,23 @@
                 'product_id': itemId,
                 csrfmiddlewaretoken: '{{ csrf_token }}',
             },
-
             dataType: 'json',
             success: function (data) {
+                console.log('Success. Quantity:', data.qty);
+                console.log('Message:', data.message);
+    
+                // Update the cart quantity in the header
                 $('#cart-quantity').text(data.qty);
-
-                location.reload();
+    
+                // Remove the corresponding row from the table
+                var rowId = '#cart-item-' + itemId;
+                console.log('Removing row:', rowId);
+                $(rowId).remove();
             },
-
             error: function(error) {
                 console.log('Error', error);
             }
         });
-    }
+    }    
 </script>
 {% endblock %}

@@ -1,49 +1,26 @@
-<!-- templates/checkout.html -->
+<!-- In your template file -->
+<button id="checkout-button">Checkout</button>
+<script type="text/javascript">
+    // Load Stripe.js on your website.
+    var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
 
-{% extends 'SeniorProjectApp/base.html' %}
-
-{% block content %}
-  <h2>Checkout</h2>
-  <form action="{% url 'checkout' %}" method="POST">
-    {% csrf_token %}
-    <label for="card-element">
-      Credit or debit card
-    </label>
-    <div id="card-element">
-      <!-- A Stripe Element will be inserted here. -->
-    </div>
-
-    <!-- Used to display form errors. -->
-    <div id="card-errors" role="alert"></div>
-
-    <button>Submit Payment</button>
-  </form>
-  <script src="https://js.stripe.com/v3/"></script>
-  <script>
-    // JavaScript code for handling Stripe.js and creating a token
-    var stripe = Stripe('{{ STRIPE_PUBLISHABLE_KEY }}');
-
-    var elements = stripe.elements();
-    var cardElement = elements.create('card');
-
-    cardElement.mount('#card-element');
-
-    var form = document.querySelector('form');
-    var errorElement = document.getElementById('card-errors');
-
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      stripe.createToken(cardElement).then(function(result) {
-        if (result.error) {
-          // Show error message to the user
-          errorElement.textContent = result.error.message;
-        } else {
-          // Token successfully created, submit the form
-          var token = result.token;
-          form.submit();
-        }
-      });
+    // When the user clicks on the button
+    document.getElementById('checkout-button').addEventListener('click', function() {
+        fetch('/create-checkout-session/', { method: 'POST' })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(session) {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function(result) {
+                // If redirectToCheckout fails due to a browser or network error
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
     });
-  </script>
-{% endblock %}
+</script>

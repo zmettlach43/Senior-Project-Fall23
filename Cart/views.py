@@ -7,7 +7,7 @@ def cart(request):
     cart = Cart(request)
     cart_items = cart.cart.values()
     name = cart.cart.values
-    total_price = sum(float(item['price']) for item in cart_items)
+    total_price = sum(float(item['price']) * item['quantity'] for item in cart_items)
 
     return render(request, "cart/cart.html", {'cart_items': cart_items, 'total_price': total_price, 'name': name})
 

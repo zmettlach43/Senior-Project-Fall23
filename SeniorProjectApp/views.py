@@ -11,8 +11,6 @@ import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# Create your views here.
-
 def index(request):
     return render(request, 'SeniorProjectApp/index.html', {'user': request.user})
 
@@ -98,6 +96,7 @@ def checkout(request):
             cancel_url=request.build_absolute_uri('/cancel/'),    # Update the URL to your cancel route
         )
 
+
         # Redirect the user to Stripe Checkout
         return redirect(checkout_session.url, code=303)
 
@@ -114,5 +113,6 @@ def payment_success(request):
 def payment_cancel(request):
     # Handle the payment cancellation scenario
     return render(request, 'SeniorProjectApp/payment_cancel.html', {})
+
 
 # Other view functions...

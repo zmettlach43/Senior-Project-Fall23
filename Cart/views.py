@@ -2,19 +2,26 @@ from django.shortcuts import render, get_object_or_404
 from .cart import Cart
 from SeniorProjectApp.models import MenuItem, UserCart, CartItem
 from django.http import JsonResponse
+from django.contrib.auth.models import AnonymousUser
 
 def cart(request):
-    cart, created = UserCart.objects.get_or_create(user=request.user)
-    
-    name = cart.cartitem_set.first().product.name if cart.cartitem_set.exists() else None
-    cart_items = cart.cartitem_set.all()
-    total_price = sum(float(cart_item.product.price) * cart_item.quantity for cart_item in cart_items)
+    if request.user.is_authenticated:
+        cart, created = UserCart.objects.get_or_create(user=request.user)
+        name = cart.cartitem_set.first().product.name if cart.cartitem_set.exists() else None
+        cart_items = cart.cartitem_set.all()
+        total_price = sum(float(cart_item.product.price) * cart_item.quantity for cart_item in cart_items)
+    else:
+        cart_items = []
+        total_price = 0
+        name = None
 
     return render(request, "cart/cart.html", {'cart_items': cart_items, 'total_price': total_price, 'name': name})
 
-
-
 def cart_add(request):
+    if not request.user.is_authenticated or isinstance(request.user, AnonymousUser):
+        response_data = {'message': 'Please log in to add items to the cart.'}
+        return JsonResponse(response_data, status=401)
+
     cart = Cart(request)
 
     if request.POST.get('action') == 'post':
@@ -36,6 +43,9 @@ def cart_add(request):
         response_data = {'qty': cart_quantity}
         return JsonResponse(response_data)
 
+    # If the request does not have the 'action' parameter or is not 'post'
+    response_data = {'message': 'Invalid request.'}
+    return JsonResponse(response_data, status=400)
 
 def cart_delete(request):
     if request.POST.get('action') == 'post':
@@ -59,5 +69,3 @@ def cart_delete(request):
         cart_quantity = len(Cart(request))
         response_data = {'qty': cart_quantity}
         return JsonResponse(response_data)
-
-

@@ -13,14 +13,14 @@
         </thead>
         <tbody>
           {% for item in cart_items %}
-          <tr style="color: white">
-            <td>{{ item.product.name }}</td>
-            <td>${{ item.product.price }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>
-                <button class="btn btn-danger" onclick="removeFromCart({{ item.id }})">Remove</button>
-            </td>            
-          </tr>
+            <tr style="color: white">
+                <td>{{ item.product.name }}</td>
+                <td>${{ item.product.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                    <button class="btn btn-danger remove-from-cart-btn" data-product-id="{{ item.product.id }}">Remove</button>
+                </td>                       
+            </tr>
           {% endfor %}
         </tbody>
     </table>
@@ -37,32 +37,28 @@
     </div>
 </div>
 <script>
-    function removeFromCart(itemId) {
-        $.ajax({
-            url: "{% url 'cart_delete' %}",
-            type: 'POST',
-            data: {
-                'action': 'post',
-                'product_id': itemId,
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-            },
-            dataType: 'json',
-            success: function (data) {
-                console.log('Success. Quantity:', data.qty);
-                console.log('Message:', data.message);
-    
-                // Update the cart quantity in the header
-                $('#cart-quantity').text(data.qty);
-    
-                // Remove the corresponding row from the table
-                var rowId = '#cart-item-' + itemId;
-                console.log('Removing row:', rowId);
-                $(rowId).remove();
-            },
-            error: function(error) {
-                console.log('Error', error);
-            }
+    $(document).ready(function () {
+        $(".remove-from-cart-btn").on('click', function () {
+            var productId = $(this).data("product-id");
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "cart_delete" %}',
+                data: {
+                    'action': 'post',
+                    'product_id': productId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    alert('Item removed from the cart!');
+                    location.reload(); 
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
         });
-    }    
+    });
 </script>
 {% endblock %}

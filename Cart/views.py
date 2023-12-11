@@ -38,17 +38,26 @@ def cart_add(request):
 
 
 def cart_delete(request):
-    cart = Cart(request)
-
     if request.POST.get('action') == 'post':
         item_id = int(request.POST.get('product_id'))
-        item = get_object_or_404(MenuItem, id=item_id)
+        user_cart = get_object_or_404(UserCart, user=request.user)
+        
+        # Retrieve all instances of the item in the user's cart
+        cart_items = CartItem.objects.filter(product__id=item_id, cart=user_cart)
+        
+        # Delete one instance of the item (if it exists)
+        if cart_items.exists():
+            # Decrease the quantity by 1, and save the instance
+            cart_item = cart_items.first()
+            if cart_item.quantity > 1:
+                cart_item.quantity -= 1
+                cart_item.save()
+            else:
+                # If the quantity is 1, remove the entire instance
+                cart_item.delete()
 
-        cart.remove(item)
-        cart_quantity = len(cart)
-
-        response_data = {'qty': cart_quantity, 'message': f'Item {item_id} removed successfully.'}
+        cart_quantity = len(Cart(request))
+        response_data = {'qty': cart_quantity}
         return JsonResponse(response_data)
-
 
 

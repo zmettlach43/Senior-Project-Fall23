@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django import forms
+from django.contrib.auth.models import User
 import datetime
 
 User = settings.AUTH_USER_MODEL
@@ -39,25 +40,11 @@ class Carausel(models.Model):
     def __str__(self):
         return str(self.id)
 
-#Customers
-class Customer(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=10)
-    email = models.EmailField(max_length=100)
-    password = models.CharField(max_length=100)
+class UserCart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField(MenuItem, through='CartItem')
 
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-    
-#Customer Order
-class Order(models.Model):
-    item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-    phone = models.CharField(max_length=20, default='', blank=True)
-    date = models.DateField(default=datetime.datetime.today)
-    status = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.item
+class CartItem(models.Model):
+    product = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    cart = models.ForeignKey(UserCart, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)

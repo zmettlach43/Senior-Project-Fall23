@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import MenuItemCategory, MenuItem, Menu, Order, Carausel
+from .models import MenuItemCategory, MenuItem, Menu, Carausel, UserCart, CartItem
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.conf import settings
@@ -77,42 +77,45 @@ def register_user(request):
 
 def checkout(request):
     try:
-        # Create a new Stripe Checkout Session
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[{
+        user = request.user
+        user_cart = UserCart.objects.get(user=user)
+        cart_items = CartItem.objects.filter(cart=user_cart)
+
+        line_items = []
+        for cart_item in cart_items:
+            line_items.append({
                 'price_data': {
                     'currency': 'usd',
                     'product_data': {
-                        'name': 'Product Name',
-                        # Add more product details if necessary
+                        'name': cart_item.product.name,
                     },
-                    'unit_amount': 1000,  # Price in cents
+                    'unit_amount': int(cart_item.product.price * 100),
                 },
-                'quantity': 1,
-            }],
-            mode='payment',
-            success_url=request.build_absolute_uri('/success/'),  # Update the URL to your success route
-            cancel_url=request.build_absolute_uri('/cancel/'),    # Update the URL to your cancel route
-        )
+                'quantity': cart_item.quantity,
+            })
 
+        # Create a new Stripe Checkout Session with line_items
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url=request.build_absolute_uri('/success/'),
+            cancel_url=request.build_absolute_uri('/cancel/'),
+        )
 
         # Redirect the user to Stripe Checkout
         return redirect(checkout_session.url, code=303)
 
     except Exception as e:
         return render(request, 'SeniorProjectApp/checkout.html', {'error': str(e)})
-    
-    # Other imports and view functions...
 
 def payment_success(request):
-    # Handle the successful payment scenario
-    # You can add logic here to update order status, send confirmation emails, etc.
+    user = request.user
+    user_cart = UserCart.objects.get(user=user)
+    CartItem.objects.filter(cart=user_cart).delete()
+
     return render(request, 'SeniorProjectApp/payment_success.html', {})
 
 def payment_cancel(request):
     # Handle the payment cancellation scenario
     return render(request, 'SeniorProjectApp/payment_cancel.html', {})
-
-
-# Other view functions...

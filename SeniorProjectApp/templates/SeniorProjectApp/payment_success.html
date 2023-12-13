@@ -7,14 +7,9 @@
             <h2 class="display-3 text-success">Payment Successful!</h2>
             <p class="lead mt-3 text-white">Thank you for your purchase. Your order has been placed and is being processed.</p>
             
-            <p class="text-white">
-                A confirmation email has been sent to your email address. If you have any questions about your order, please 
-                <a href="{% url 'home' %}" class="text-primary">contact us</a>.
-            </p>
-            
+            <p class="text-white">If you have any questions about your order, please <a href="{% url 'home' %}" class="text-primary">contact us</a>.</p>
             <div class="mt-4">
                 <a href="{% url 'menu' %}" class="btn btn-primary">Continue Shopping</a>
-                <a href="{% url 'order_history' %}" class="btn btn-secondary">View Order History</a>
             </div>
         </div>
     </div>

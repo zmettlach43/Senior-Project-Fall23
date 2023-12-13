@@ -34,27 +34,37 @@
         e.preventDefault();
         var productId = $(this).val();
 
-        $.ajax({
-            type: 'POST',
-            url: '{% url 'cart_add' %}',
-            data: {
-                product_id: productId,
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                action: 'post'
-            },
-            success: function(json){
-                // Update the cart quantity display
-                document.getElementById("cart_quantity").textContent = json.qty;
+        // Check if the user is authenticated
+        var isAuthenticated = '{{ request.user.is_authenticated }}';
+        
+        if (isAuthenticated === 'True') {
+            // User is authenticated, proceed with adding to the cart
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'cart_add' %}',
+                data: {
+                    product_id: productId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post'
+                },
+                success: function(json){
+                    // Update the cart quantity display
+                    document.getElementById("cart_quantity").textContent = json.qty;
 
-                // Display the success message
-                alert('Item has been added to your cart.');
+                    // Display the success message
+                    alert('Item has been added to your cart.');
 
-                // You can also use your preferred way to display the message, such as a notification library
-            },
-            error: function(xhr, errmsg, err){
-                // Handle the error if needed
-            } 
-        });  
+                    // You can also use your preferred way to display the message, such as a notification library
+                },
+                error: function(xhr, errmsg, err){
+                    // Handle the error if needed
+                }
+            });
+        } else {
+            // User is not authenticated, display a message or prompt to log in
+            alert('Please log in to add items to the cart.');
+            // Alternatively, you can redirect the user to the login page or show a login modal
+        }
     });
 </script>
 {% endblock %}

@@ -19,34 +19,41 @@ def cart(request):
 
 
 def cart_add(request):
-    if not request.user.is_authenticated or isinstance(request.user, AnonymousUser):
-        response_data = {'message': 'Please log in to add items to the cart.'}
-        return JsonResponse(response_data, status=401)
-
+    # Create a Cart object to manage the cart
     cart = Cart(request)
 
+    # Check if the request is a POST request with the 'action' parameter set to 'post'
     if request.POST.get('action') == 'post':
+        # Get the item ID from the request
         item_id = int(request.POST.get('product_id'))
+        # Get the MenuItem object corresponding to the item ID
         item = get_object_or_404(MenuItem, id=item_id)
 
-        user_cart, created = UserCart.objects.get_or_create(user=request.user)
-
         # Check if the item is already in the user's cart
-        cart_item, cart_item_created = CartItem.objects.get_or_create(product=item, cart=user_cart)
+        if request.user.is_authenticated:
+            # If the user is authenticated, get or create their cart
+            user_cart, created = UserCart.objects.get_or_create(user=request.user)
+            cart_item, cart_item_created = CartItem.objects.get_or_create(product=item, cart=user_cart)
 
-        # If the item already exists in the cart, increment the quantity
-        if not cart_item_created:
-            cart_item.quantity += 1
-            cart_item.save()
+            # If the item already exists in the cart, increment the quantity
+            if not cart_item_created:
+                cart_item.quantity += 1
+                cart_item.save()
+        else:
+            # If the user is not authenticated, allow adding items to the cart without creating a UserCart
+            cart.add(item, quantity=1)
 
+        # Get the current cart quantity
         cart_quantity = len(cart)
 
+        # Prepare the response data with the updated cart quantity
         response_data = {'qty': cart_quantity}
         return JsonResponse(response_data)
 
-    # If the request does not have the 'action' parameter or is not 'post'
+    # If the request does not have the 'action' parameter or is not 'post', return an error response
     response_data = {'message': 'Invalid request.'}
     return JsonResponse(response_data, status=400)
+
 
 def cart_delete(request):
     if request.POST.get('action') == 'post':
@@ -70,16 +77,3 @@ def cart_delete(request):
         cart_quantity = len(Cart(request))
         response_data = {'qty': cart_quantity}
         return JsonResponse(response_data)
-    
-def order_history(request):
-    # Get the user's order history
-    user = request.user
-    user_carts = UserCart.objects.filter(user=user)
-    
-    # Collect cart items for each order
-    order_history = []
-    for user_cart in user_carts:
-        cart_items = CartItem.objects.filter(cart=user_cart)
-        order_history.append({'cart': user_cart, 'items': cart_items})
-    
-    return render(request, 'cart/order_history.html', {'order_history': order_history})
